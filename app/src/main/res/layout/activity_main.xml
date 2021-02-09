@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etName"
                     android:hint="@string/name"
                     android:textColor="#363a43"
                     android:textColorHint="#7a8089"
