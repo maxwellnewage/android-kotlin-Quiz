@@ -1,5 +1,6 @@
 package com.maxwell.quiz
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var tvOptionFour: TextView
     private lateinit var btSubmit: Button
     private var mCorrectAnswers = 0
+    private var mUserName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,8 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
         tvOptionThree = findViewById(R.id.tvOptionThree)
         tvOptionFour = findViewById(R.id.tvOptionFour)
         btSubmit = findViewById(R.id.btSubmit)
+
+        mUserName = intent.getStringExtra(Constants.USER_NAME)
     }
 
     private fun setQuestion() {
@@ -121,10 +125,17 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
                 if(mSelectedOptionPosition == 0) {
                     mCurrentPosition++
 
-                    if(mCurrentPosition <= mQuestionsList.size)
+                    if(mCurrentPosition <= mQuestionsList.size) {
                         setQuestion()
-                    else
-                        Toast.makeText(this, "Quiz OK", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val intent = Intent(this, ResultActivity::class.java)
+                        intent.putExtra(Constants.USER_NAME, mUserName)
+                        intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+                        intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionsList.size)
+
+                        startActivity(intent)
+                        finish()
+                    }
                 } else {
                     val question = mQuestionsList[mCurrentPosition - 1]
                     if(question.correctAnswer != mSelectedOptionPosition) {

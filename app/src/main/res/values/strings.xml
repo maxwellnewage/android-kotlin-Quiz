@@ -8,4 +8,5 @@
     <string name="holder_progress">0/10</string>
     <string name="quiz_option_holder">Apple</string>
     <string name="bt_quiz">SUBMIT</string>
+    <string name="result_score">Your Score is %d out of %d</string>
 </resources>
