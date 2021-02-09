@@ -21,6 +21,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var tvOptionThree: TextView
     private lateinit var tvOptionFour: TextView
     private lateinit var btSubmit: Button
+    private var mCorrectAnswers = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,6 +129,8 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
                     val question = mQuestionsList[mCurrentPosition - 1]
                     if(question.correctAnswer != mSelectedOptionPosition) {
                         answerView(mSelectedOptionPosition, R.drawable.incorrect_option_border_bg)
+                    } else {
+                        mCorrectAnswers++
                     }
 
                     answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
