@@ -2,7 +2,7 @@ package com.maxwell.quiz
 
 data class Question(
     val id: Int,
-    val question: String,
+    val text: String,
     val image: Int,
     val optionOne: String,
     val optionTwo: String,
