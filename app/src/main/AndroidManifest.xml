@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Quiz">
         <activity
             android:name=".QuizQuestionsActivity"
-            android:theme="@style/NoActionBarTheme"z<asx56
+            android:theme="@style/NoActionBarTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
