@@ -112,6 +112,7 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/btSubmit"
             android:text="@string/bt_quiz"
             android:layout_margin="10dp"
             android:textStyle="bold"

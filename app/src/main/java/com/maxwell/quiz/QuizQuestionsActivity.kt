@@ -5,9 +5,7 @@ import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 
 class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
@@ -22,6 +20,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var tvOptionTwo: TextView
     private lateinit var tvOptionThree: TextView
     private lateinit var tvOptionFour: TextView
+    private lateinit var btSubmit: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,23 +34,29 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initViews() {
-        pb = findViewById<ProgressBar>(R.id.pb)
+        pb = findViewById(R.id.pb)
         tvProgress = findViewById(R.id.tvProgress)
-        tvQuestion = findViewById<TextView>(R.id.tvQuestion)
-        ivFlag = findViewById<ImageView>(R.id.ivFlag)
-        tvOptionOne = findViewById<TextView>(R.id.tvOptionOne)
-        tvOptionTwo = findViewById<TextView>(R.id.tvOptionTwo)
-        tvOptionThree = findViewById<TextView>(R.id.tvOptionThree)
-        tvOptionFour = findViewById<TextView>(R.id.tvOptionFour)
+        tvQuestion = findViewById(R.id.tvQuestion)
+        ivFlag = findViewById(R.id.ivFlag)
+        tvOptionOne = findViewById(R.id.tvOptionOne)
+        tvOptionTwo = findViewById(R.id.tvOptionTwo)
+        tvOptionThree = findViewById(R.id.tvOptionThree)
+        tvOptionFour = findViewById(R.id.tvOptionFour)
+        btSubmit = findViewById(R.id.btSubmit)
     }
 
     private fun setQuestion() {
         mQuestionsList = Constants.getQuestions()
 
-        mCurrentPosition = 1
         val question = mQuestionsList[mCurrentPosition - 1]
 
         defaultOptionsView()
+
+        if(mCurrentPosition == mQuestionsList.size) {
+            btSubmit.text = "FINISH"
+        } else {
+            btSubmit.text = "SUBMIT"
+        }
 
         pb.progress = mCurrentPosition
 
@@ -72,6 +77,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
         tvOptionTwo.setOnClickListener(this)
         tvOptionThree.setOnClickListener(this)
         tvOptionFour.setOnClickListener(this)
+        btSubmit.setOnClickListener(this)
     }
 
     private fun selectedOptionView(tv: TextView, selectedOptNum: Int) {
@@ -95,12 +101,45 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun answerView(answer: Int, drawableView: Int) {
+        when(answer) {
+            1 -> tvOptionOne.background = ContextCompat.getDrawable(this, drawableView)
+            2 -> tvOptionTwo.background = ContextCompat.getDrawable(this, drawableView)
+            3 -> tvOptionThree.background = ContextCompat.getDrawable(this, drawableView)
+            4 -> tvOptionFour.background = ContextCompat.getDrawable(this, drawableView)
+        }
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.tvOptionOne -> selectedOptionView(tvOptionOne, 1)
             R.id.tvOptionTwo -> selectedOptionView(tvOptionTwo, 2)
             R.id.tvOptionThree -> selectedOptionView(tvOptionThree, 3)
             R.id.tvOptionFour -> selectedOptionView(tvOptionFour, 4)
+            R.id.btSubmit -> {
+                if(mSelectedOptionPosition == 0) {
+                    mCurrentPosition++
+
+                    if(mCurrentPosition <= mQuestionsList.size)
+                        setQuestion()
+                    else
+                        Toast.makeText(this, "Quiz OK", Toast.LENGTH_SHORT).show()
+                } else {
+                    val question = mQuestionsList[mCurrentPosition - 1]
+                    if(question.correctAnswer != mSelectedOptionPosition) {
+                        answerView(mSelectedOptionPosition, R.drawable.incorrect_option_border_bg)
+                    }
+
+                    answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
+
+                    if(mCurrentPosition == mQuestionsList.size)
+                        btSubmit.text = "FINISH"
+                    else
+                        btSubmit.text = "GO TO THE NEXT QUESTION"
+
+                    mSelectedOptionPosition = 0
+                }
+            }
         }
     }
 }
